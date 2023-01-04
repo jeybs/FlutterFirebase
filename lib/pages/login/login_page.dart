@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
+import 'package:flutter_firebase/pages/signup/signup_page.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
 import 'package:flutter_firebase/ui/buttons/primary_outlined_button.dart';
 import 'package:flutter_firebase/ui/textfields/primary_textfield.dart';
@@ -69,7 +72,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 25.0),
                   PrimaryOutlinedButton(label: 'Sign-Up', onButtonClick: () {
-
+                    context.router.push(SignupRoute());
                   })
                 ],
               ),
