@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/pages/login/login_page.dart';
 
-class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<App> createState() => _AppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _AppState extends State<App> {
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
