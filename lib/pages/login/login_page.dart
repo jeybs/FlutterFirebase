@@ -103,11 +103,11 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 25.0),
             PrimaryButton(label: 'Login', onButtonClick: () {
 
-              pd.style(
-                  message: "Logging In...",
-                  progressWidget: const LoadingDialog());
-
-              pd.show();
+              // pd.style(
+              //     message: "Logging In...",
+              //     progressWidget: const LoadingDialog());
+              //
+              // pd.show();
 
               cubit?.login(email, password);
             }),
