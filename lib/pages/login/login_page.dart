@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
-import 'package:flutter_firebase/pages/signup/signup_page.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
 import 'package:flutter_firebase/ui/buttons/primary_outlined_button.dart';
 import 'package:flutter_firebase/ui/textfields/primary_textfield.dart';
@@ -24,10 +23,10 @@ class LoginPage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0x66D7F2FD),
-                  Color(0xffD7F2FD),
-                  Color(0xffD7F2FD),
-                  Color(0xffD7F2FD),
+                  Color(0x665ac18e),
+                  Color(0xff5ac18e),
+                  Color(0xff5ac18e),
+                  Color(0xff5ac18e),
                 ]
               )
             ),
@@ -72,7 +71,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 25.0),
                   PrimaryOutlinedButton(label: 'Sign-Up', onButtonClick: () {
-                    context.router.push(SignupRoute());
+                    context.router.push(const SignUpRoute());
                   })
                 ],
               ),

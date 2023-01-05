@@ -29,10 +29,10 @@ class Routes extends _i3.RootStackRouter {
         child: const _i1.LoginPage(),
       );
     },
-    SignupRoute.name: (routeData) {
+    SignUpRoute.name: (routeData) {
       return _i3.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i2.SignupPage(),
+        child: const _i2.SignUpPage(),
       );
     },
   };
@@ -44,8 +44,8 @@ class Routes extends _i3.RootStackRouter {
           path: '/',
         ),
         _i3.RouteConfig(
-          SignupRoute.name,
-          path: '/signup-page',
+          SignUpRoute.name,
+          path: '/sign-up-page',
         ),
       ];
 }
@@ -63,13 +63,13 @@ class LoginRoute extends _i3.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.SignupPage]
-class SignupRoute extends _i3.PageRouteInfo<void> {
-  const SignupRoute()
+/// [_i2.SignUpPage]
+class SignUpRoute extends _i3.PageRouteInfo<void> {
+  const SignUpRoute()
       : super(
-          SignupRoute.name,
-          path: '/signup-page',
+          SignUpRoute.name,
+          path: '/sign-up-page',
         );
 
-  static const String name = 'SignupRoute';
+  static const String name = 'SignUpRoute';
 }

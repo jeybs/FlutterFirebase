@@ -6,7 +6,7 @@ import 'package:flutter_firebase/pages/signup/signup_page.dart';
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
     AutoRoute(page: LoginPage, initial: true),
-    AutoRoute(page: SignupPage),
+    AutoRoute(page: SignUpPage),
   ],
 )
 class $Routes {}
