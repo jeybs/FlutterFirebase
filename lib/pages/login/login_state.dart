@@ -17,3 +17,8 @@ class LoginFail extends LoginState {
   final String message;
   const LoginFail(this.message);
 }
+
+class AlreadyLoggedIn extends LoginState {
+  final bool isLoggedIn;
+  const AlreadyLoggedIn(this.isLoggedIn);
+}

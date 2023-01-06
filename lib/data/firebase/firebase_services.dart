@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase/models/user_data.dart';
 
 class FirebaseServices {
 
@@ -12,6 +13,19 @@ class FirebaseServices {
   FirebaseServices() {
     authInstance = FirebaseAuth.instance;
     firestoreInstance = FirebaseFirestore.instance;
+  }
+
+  logout() async {
+    await authInstance.signOut();
+  }
+
+  bool isUerLoggedIn() {
+     User? userData = authInstance.currentUser;
+     if(userData != null) {
+       return true;
+     }
+
+     return false;
   }
 
   Future<String> createUserAccount(String email, String password, String name, String mobile) async {
@@ -47,7 +61,7 @@ class FirebaseServices {
       .where('mobile', isEqualTo: mobile)
       .get();
 
-    if(snaphshot.docs.length > 0) {
+    if(snaphshot.docs.isNotEmpty) {
       return true;
     }
 
@@ -56,5 +70,19 @@ class FirebaseServices {
 
     // final userData = snaphshot.docs.map((e) => e).single;
     // print(userData.data());
+  }
+
+  Future<UserData?> getUserData() async {
+    String uid = authInstance.currentUser!.uid;
+    final snapshot = firestoreInstance.collection(_userCollection).doc(uid).snapshots();
+
+    if(await snapshot.isEmpty == false) {
+      final userSnapshot = await snapshot.first;
+      UserData userData = UserData.fromMap(userSnapshot.data()!);
+
+      return userData;
+    }
+
+    return null;
   }
 }

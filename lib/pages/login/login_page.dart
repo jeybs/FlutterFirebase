@@ -51,18 +51,23 @@ class LoginPage extends StatelessWidget {
               listener: (context, state) {
                 pd.hide();
                 if(state is LoginSuccess) {
-
+                  context.router.pushAndPopUntil(HomeRoute(), predicate: (_) => false);
                 } else if(state is LoginFail) {
 
                   showOkAlertDialog(
                     context: context,
                     title: "Login Error",
                     message: state.message);
+                } else if(state is AlreadyLoggedIn) {
+                  if(state.isLoggedIn) {
+                    context.router.pushAndPopUntil(HomeRoute(), predicate: (_) => false);
+                  }
                 }
               },
               builder: (context, state) {
                 if(cubit == null) {
                   cubit = context.read<LoginCubit>();
+                  cubit?.checkIfLoggedIn();
                 }
 
                 return mainBody(context);
@@ -103,11 +108,11 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 25.0),
             PrimaryButton(label: 'Login', onButtonClick: () {
 
-              // pd.style(
-              //     message: "Logging In...",
-              //     progressWidget: const LoadingDialog());
-              //
-              // pd.show();
+              pd.style(
+                  message: "Logging In...",
+                  progressWidget: const LoadingDialog());
+
+              pd.show();
 
               cubit?.login(email, password);
             }),

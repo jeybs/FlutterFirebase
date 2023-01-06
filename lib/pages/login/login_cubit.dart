@@ -14,8 +14,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   login(String email, String password) async {
-    _firebaseServices.isMobileExist(email);
-    return;
     Future.delayed(Duration(seconds: 1), () {
       if(email.isEmpty || password.isEmpty) {
         emit(LoginFail("Kindly enter your email address and password"));
@@ -32,4 +30,10 @@ class LoginCubit extends Cubit<LoginState> {
     });
   }
 
+  checkIfLoggedIn() {
+    print(_firebaseServices.isUerLoggedIn());
+    Future.delayed(Duration(microseconds: 500), () {
+      emit(AlreadyLoggedIn(_firebaseServices.isUerLoggedIn()));
+    });
+  }
 }

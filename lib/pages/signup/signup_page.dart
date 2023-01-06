@@ -7,7 +7,7 @@ import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
 import 'package:flutter_firebase/pages/signup/signup_cubit.dart';
 import 'package:flutter_firebase/ui/appbar/primary_appbar.dart';
-import 'package:flutter_firebase/ui/appbar/submit_button.dart';
+import 'package:flutter_firebase/ui/buttons/submit_button.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
 import 'package:flutter_firebase/ui/loading_dialog.dart';
 import 'package:flutter_firebase/ui/textfields/number_textfield.dart';
