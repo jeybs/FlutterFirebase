@@ -17,6 +17,14 @@ class HomeAppbar {
         ),
       ),
       centerTitle: true,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.person_add, color: Colors.white, size: 25.0,),
+          onPressed: () {
+
+          },
+        )
+      ],
     );
   }
 
