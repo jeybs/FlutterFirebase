@@ -4,7 +4,7 @@ import 'package:flutter_firebase/constant/app_color.dart';
 
 class HomeAppbar {
 
-  static AppBar getDefaultAppBar(BuildContext context, String title) {
+  static AppBar getDefaultAppBar(BuildContext context, String title, Function() onSearchTap) {
     return AppBar(
       backgroundColor: AppColor.primaryColor,
       elevation: 0.0,
@@ -21,7 +21,7 @@ class HomeAppbar {
         IconButton(
           icon: const Icon(Icons.person_add, color: Colors.white, size: 25.0,),
           onPressed: () {
-
+            onSearchTap();
           },
         )
       ],

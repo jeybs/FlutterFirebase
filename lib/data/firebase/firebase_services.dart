@@ -1,18 +1,27 @@
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase/models/user_data.dart';
 
 class FirebaseServices {
 
   late FirebaseAuth authInstance;
   late FirebaseFirestore firestoreInstance;
+  late Reference fireStorageRef;
 
   String _userCollection = "users";
 
   FirebaseServices() {
     authInstance = FirebaseAuth.instance;
     firestoreInstance = FirebaseFirestore.instance;
+    fireStorageRef = FirebaseStorage.instance.ref();
+  }
+
+  String? getUserId() {
+    return  authInstance.currentUser!.uid;
   }
 
   logout() async {
@@ -74,15 +83,40 @@ class FirebaseServices {
 
   Future<UserData?> getUserData() async {
     String uid = authInstance.currentUser!.uid;
-    final snapshot = firestoreInstance.collection(_userCollection).doc(uid).snapshots();
+    final snapshot = await firestoreInstance.collection(_userCollection).doc(uid).get(const GetOptions(source: Source.server));
 
-    if(await snapshot.isEmpty == false) {
-      final userSnapshot = await snapshot.first;
-      UserData userData = UserData.fromMap(userSnapshot.data()!);
+    if(snapshot != null) {
+      UserData userData = UserData.fromMap(snapshot.data() as Map<String, dynamic>);
 
       return userData;
     }
 
     return null;
+  }
+
+  Future<String> uploadImage(File pathFile, String imageName) async {
+    try {
+      final imagesRef = fireStorageRef.child("users/$imageName");
+      await imagesRef.putFile(pathFile);
+
+      return imagesRef.fullPath;
+    } on FirebaseException catch (e) {
+      print("Error Uploading => ${e.message}");
+      return "";
+    }
+  }
+
+  Future<bool> updateUserProfilePhoto(String newPath) async {
+    String uid = authInstance.currentUser!.uid;
+    final docRef = firestoreInstance.collection(_userCollection).doc(uid);
+    final pathReference = fireStorageRef.child(newPath);
+    final String imagePath = await pathReference.getDownloadURL();
+    return docRef.update({"photo": imagePath}).then((value) {
+      print("Success Update Photo");
+      return true;
+    }).catchError((error) {
+      print("Error Update Photo => ${error.message}");
+      return false;
+    });
   }
 }

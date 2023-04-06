@@ -17,3 +17,20 @@ class UserProfileLoaded extends HomeState {
 class UserLogout extends HomeState {
  const UserLogout();
 }
+
+class UploadImageSuccess extends HomeState {
+  final String path;
+  const UploadImageSuccess(this.path);
+}
+
+class UploadImageFail extends HomeState {
+  const UploadImageFail();
+}
+
+class UpdateUserProfilePhotoSuccess extends HomeState {
+  const UpdateUserProfilePhotoSuccess();
+}
+
+class UpdateUserProfilePhotoFail extends HomeState {
+  const UpdateUserProfilePhotoFail();
+}
