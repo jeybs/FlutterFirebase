@@ -67,7 +67,6 @@ class LoginPage extends StatelessWidget {
               builder: (context, state) {
                 if(cubit == null) {
                   cubit = context.read<LoginCubit>();
-                  cubit?.checkIfLoggedIn();
                 }
 
                 return mainBody(context);
@@ -88,6 +87,13 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Hero(
+              tag: "icon",
+              child: Image.asset(
+                'assets/icon_splash_chat.png',
+                width: 150.0,
+              ),
+            ),
             PrimaryTextField(
               label: "Email Address",
               onTextChanged: (value) {
