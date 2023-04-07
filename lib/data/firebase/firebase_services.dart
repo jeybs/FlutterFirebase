@@ -45,8 +45,11 @@ class FirebaseServices {
         final userCollection = firestoreInstance.collection(_userCollection).doc(userCredentials.user?.uid);
 
         Map<String, dynamic> userData = {
+          'uid': userCredentials.user?.uid,
           'name': name.toUpperCase(),
+          "email": email,
           'mobile': mobile,
+          "photo": "",
         };
 
         final _resp = await userCollection.set(userData).then((_) {
@@ -69,6 +72,7 @@ class FirebaseServices {
     final snaphshot = await firestoreInstance.collection(_userCollection)
       .where('mobile', isEqualTo: mobile)
       .get();
+
 
     if(snaphshot.docs.isNotEmpty) {
       return true;
@@ -118,5 +122,20 @@ class FirebaseServices {
       print("Error Update Photo => ${error.message}");
       return false;
     });
+  }
+
+  Future<UserData?> searchUser(String email) async {
+    List<String> uid = await authInstance.fetchSignInMethodsForEmail(email);
+    print(uid);
+    // String uid = authInstance.currentUser!.uid;
+    // final snapshot = await firestoreInstance.collection(_userCollection).doc(uid).get(const GetOptions(source: Source.server));
+    //
+    // if(snapshot != null) {
+    //   UserData userData = UserData.fromMap(snapshot.data() as Map<String, dynamic>);
+    //
+    //   return userData;
+    // }
+    //
+    // return null;
   }
 }

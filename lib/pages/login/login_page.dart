@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: false);
+    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: true);
 
     return Scaffold(
       body: Stack(

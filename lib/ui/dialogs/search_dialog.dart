@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
@@ -74,7 +75,7 @@ class _SearchDialogState extends State<SearchDialog> {
               PrimaryOutlinedButton(
                 label: 'Search',
                 onButtonClick: () {
-                  Navigator.pop(context, {
+                  context.router.pop( {
                     "email": searchValue
                   });
                 },
@@ -83,7 +84,7 @@ class _SearchDialogState extends State<SearchDialog> {
               PrimaryButton(
                 label: 'Cancel',
                 onButtonClick: () {
-                  Navigator.pop(context);
+                  context.router.pop();
                 },
               ),
             ],

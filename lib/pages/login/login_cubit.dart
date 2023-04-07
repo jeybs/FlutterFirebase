@@ -16,7 +16,7 @@ class LoginCubit extends Cubit<LoginState> {
   login(String email, String password) async {
     Future.delayed(const Duration(seconds: 1), () {
       if(email.isEmpty || password.isEmpty) {
-        emit(const LoginFail("Kindly enter your email address and password"));
+        emit(LoginFail("Kindly enter your email address and password"));
         return;
       }
 
@@ -25,7 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginSuccess());
       }).catchError((error) {
         print(error.toString());
-        emit(const LoginFail("Email / Password incorrent"));
+        emit(LoginFail("Email / Password incorrent"));
       });
     });
   }

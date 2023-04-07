@@ -11,7 +11,7 @@ class SignupCubit extends Cubit<SignupState> {
 
   late FirebaseServices _firebaseServices;
 
-  SignupCubit() : super(SignupInitial()) {
+  SignupCubit() : super(const SignupInitial()) {
     _firebaseServices = FirebaseServices();
   }
 
@@ -19,33 +19,33 @@ class SignupCubit extends Cubit<SignupState> {
   signup(String name, String email, String mobile, String password, String confirmPassword, bool termAgreement)  {
     Future.delayed(const Duration(seconds: 1), () async {
       if(name.isEmpty || email.isEmpty || mobile.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-        emit(SignupFailed("Kindly fill up all required fields"));
+        emit(const SignupFailed("Kindly fill up all required fields"));
         return;
       }
 
       if(!EmailValidator.validate(email)) {
-        emit(SignupFailed("Invalid email address format"));
+        emit(const SignupFailed("Invalid email address format"));
         return;
       }
 
       if(password != confirmPassword) {
-        emit(SignupFailed("Password did not match"));
+        emit(const SignupFailed("Password did not match"));
         return;
       }
 
       if(!termAgreement) {
-        emit(SignupFailed("Kindly agree to our Privacy Policy, Terms and Conditions"));
+        emit(const SignupFailed("Kindly agree to our Privacy Policy, Terms and Conditions"));
         return;
       }
 
       if(await _firebaseServices.isMobileExist(mobile)) {
-        emit(SignupFailed("Sorry but mobile number is already been used"));
+        emit(const SignupFailed("Sorry but mobile number is already been used"));
         return;
       }
 
       String resp = await _firebaseServices.createUserAccount(email, password, name, mobile);
       if(resp.isEmpty) {
-        emit(SignupSuccess());
+        emit(const SignupSuccess());
       } else {
         emit(SignupFailed(resp));
       }

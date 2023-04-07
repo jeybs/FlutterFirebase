@@ -45,13 +45,15 @@ class _HomePageState extends State<HomePage> {
         ).then((result) async {
           if(result != null) {
 
-            if(result['email'] == false) {
-              pd.style(
-                  message: "Searching...",
-                  progressWidget: LoadingDialog());
-
-              pd.show();
+            if(result['email'] != null) {
+              // pd.style(
+              //     message: "Searching...",
+              //     progressWidget: LoadingDialog());
+              //
+              // pd.show();
+              cubit?.searchUserByEmail(result['email']);
             }
+            
           }
         });
       }),

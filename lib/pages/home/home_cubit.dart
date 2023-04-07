@@ -28,7 +28,7 @@ class HomeCubit extends Cubit<HomeState> {
   logout() {
     Future.delayed(Duration(microseconds: 500), () async {
       await _firebaseServices.logout();
-      emit(UserLogout());
+      emit(const UserLogout());
     });
   }
 
@@ -61,5 +61,9 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       emit(UpdateUserProfilePhotoFail());
     }
+  }
+
+  searchUserByEmail(String email) {
+    _firebaseServices.searchUser(email);
   }
 }
