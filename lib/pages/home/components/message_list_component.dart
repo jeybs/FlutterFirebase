@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/message_room/message_room.dart';
+import 'package:flutter_firebase/models/user_data/user_data.dart';
+import 'package:flutter_firebase/utils/date_utils.dart';
 
 class MessageListComponent extends StatefulWidget {
 
-  final List<Contact> contactList;
+  final List<MessageRoom> messageRoomList;
+  final UserData userData;
 
-  const MessageListComponent({Key? key, required this.contactList}) : super(key: key);
+  const MessageListComponent({Key? key, required this.messageRoomList, required this.userData}) : super(key: key);
 
   @override
   State<MessageListComponent> createState() => _MessageListComponentState();
@@ -22,20 +26,21 @@ class _MessageListComponentState extends State<MessageListComponent> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: widget.contactList.length,
+      itemCount: widget.messageRoomList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            context.router.push(ChatRoute(userData: widget.contactList[index].userData!));
+            context.router.push(ChatRoute(roomId: widget.messageRoomList[index].roomId, receiverRoomId: widget.messageRoomList[index].receiverRoomId,
+                userData: widget.userData, contactData: widget.messageRoomList[index].userData!));
           },
-          child: messageItem(widget.contactList[index]),
+          child: messageItem(widget.messageRoomList[index]),
         );
       },
     );
   }
 
-  Widget messageItem(Contact contact) {
+  Widget messageItem(MessageRoom messageRoom) {
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       child: Row(
@@ -43,7 +48,7 @@ class _MessageListComponentState extends State<MessageListComponent> {
           Container(
             width: 60.0,
             height: 60.0,
-            child: profileImage(contact),
+            child: profileImage(messageRoom),
           ),
           const SizedBox(width: 10.0,),
           Expanded(
@@ -54,7 +59,7 @@ class _MessageListComponentState extends State<MessageListComponent> {
                 FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    contact.userData!.name,
+                    messageRoom.userData!.name,
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.black,
@@ -62,9 +67,9 @@ class _MessageListComponentState extends State<MessageListComponent> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 5.0),
                 Text(
-                  "No message",
+                  messageRoom.lastMessage.isNotEmpty ? messageRoom.lastMessage : "No message",
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 14.0,
@@ -75,10 +80,10 @@ class _MessageListComponentState extends State<MessageListComponent> {
               ],
             ),
           ),
-          if("Date".isNotEmpty) Container(
+          if(messageRoom.lastMessageDate.isNotEmpty) Container(
             alignment: Alignment.centerRight,
             child: Text(
-              "12/14",
+              MyDateUtils.getTimeDiff(messageRoom.lastMessageDate),
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.black,
@@ -91,10 +96,10 @@ class _MessageListComponentState extends State<MessageListComponent> {
     );
   }
 
-  Widget profileImage(Contact contact) {
-    if(contact.userData!.photo.isNotEmpty) {
+  Widget profileImage(MessageRoom messageRoom) {
+    if(messageRoom.userData!.photo.isNotEmpty) {
       return ExtendedImage.network(
-        contact.userData!.photo,
+        messageRoom.userData!.photo,
         width: MediaQuery.of(context).size.width,
         fit: BoxFit.fitWidth,
         cache: true,

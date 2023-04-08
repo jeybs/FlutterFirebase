@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
 import 'package:flutter_firebase/models/contact_data/contact_data.dart';
+import 'package:flutter_firebase/models/message/message.dart';
+import 'package:flutter_firebase/models/message_room/message_room.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:flutter_firebase/utils/date_utils.dart';
 
@@ -18,7 +20,8 @@ class FirebaseServices {
 
   String _userCollection = "users";
   String _contactCollections = "contacts";
-  String _messageCollections = "";
+  String _messageCollections = "message";
+  String _messageListcollection = "message_list";
 
   FirebaseServices() {
     authInstance = FirebaseAuth.instance;
@@ -208,5 +211,121 @@ class FirebaseServices {
       print(error);
       return false;
     });
+  }
+
+  Future<void> createMessage(String roomId, String message, String toId, String fromId, FieldValue fieldValue) async {
+    final messageCollection = firestoreInstance.collection(_messageCollections)
+        .doc(roomId)
+        .collection(_messageListcollection)
+        .doc();
+
+    await messageCollection.set({
+      'message': message,
+      'message_date': fieldValue,
+      'from_id': fromId,
+      'to_id': toId
+    });
+
+    final roomCollection = firestoreInstance.collection(_messageCollections)
+        .doc(roomId);
+
+    await roomCollection.update({
+      'last_message': message,
+      'last_message_date': fieldValue
+    });
+  }
+
+  Future<bool> isUserAlreadyChat(String uid, String contactId) async {
+    final fromMessage = await firestoreInstance.collection(_messageCollections)
+        .where('from_id', isEqualTo: contactId)
+        .where('to_id', isEqualTo: uid)
+        .get(const GetOptions(source: Source.server));
+
+    final toMessage = await firestoreInstance.collection(_messageCollections)
+        .where('from_id', isEqualTo: uid)
+        .where('to_id', isEqualTo: contactId)
+        .get(const GetOptions(source: Source.server));
+
+    // Check if already had conversation
+    if(fromMessage.docs.isNotEmpty && toMessage.docs.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<String> createRoom(String uid, String contactId) async {
+    final contactCollections = firestoreInstance.collection(_messageCollections).doc();
+
+    final res = await contactCollections.set({
+      'last_message': "",
+      'last_message_date': "",
+      'from_id': uid,
+      'to_id': contactId
+    });
+
+    return contactCollections.id;
+  }
+
+  Future<List<Message>> getMessages(String roomId) async {
+    final collectionRef = await firestoreInstance.collection(_messageCollections)
+        .doc(roomId)
+        .collection(_messageListcollection)
+        .get(const GetOptions(source: Source.server));
+
+    List<Message> messageList = [];
+    if(collectionRef.docs.isNotEmpty) {
+
+      for(var docsData in collectionRef.docs) {
+        Message message = Message(
+          message: docsData.data()['message'],
+          messageDate: docsData.data()['message_date'],
+          fromId: docsData.data()['from_id'],
+          toId: docsData.data()['to_id']);
+
+        messageList.add(message);
+      }
+    }
+
+    return messageList;
+  }
+
+  Future<List<MessageRoom>> getMyRooms() async {
+    String uid = authInstance.currentUser!.uid;
+    final roomCollections = await firestoreInstance.collection(_messageCollections)
+        .where('to_id', isEqualTo: uid)
+        .orderBy('last_message_date', descending: true)
+        .get(const GetOptions(source: Source.server));
+
+    List<MessageRoom> roomList = [];
+    if(roomCollections.docs.isNotEmpty) {
+      for(var docsData in roomCollections.docs) {
+        MessageRoom room = MessageRoom(
+          userData: await searchUserByUid(docsData.data()['from_id']),
+          lastMessage: docsData.data()['last_message'],
+          lastMessageDate: docsData.data()['last_message_date'] != "" ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
+          toId: docsData.data()['to_id'],
+          roomId: docsData.id,
+          receiverRoomId: await getReceiverRoomId(docsData.data()['from_id'], docsData.data()['to_id'])
+        );
+        
+        roomList.add(room);
+      }
+    }
+
+    return roomList;
+  }
+
+  Future<String> getReceiverRoomId(String fromId, String toId)async {
+    final receiverRoomCollection = await firestoreInstance.collection(_messageCollections)
+        .where('from_id', isEqualTo: toId)
+        .where('to_id', isEqualTo: fromId)
+        .get(const GetOptions(source: Source.server));
+
+    if(receiverRoomCollection.docs.isNotEmpty) {
+      return receiverRoomCollection.docs[0].id;
+    }
+
+    return "";
   }
 }

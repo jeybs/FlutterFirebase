@@ -61,6 +61,9 @@ class Routes extends _i7.RootStackRouter {
         child: _i5.ChatPage(
           key: args.key,
           userData: args.userData,
+          contactData: args.contactData,
+          roomId: args.roomId,
+          receiverRoomId: args.receiverRoomId,
         ),
       );
     },
@@ -171,12 +174,18 @@ class ChatRoute extends _i7.PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     _i8.Key? key,
     required _i9.UserData userData,
+    required _i9.UserData contactData,
+    required String roomId,
+    required String receiverRoomId,
   }) : super(
           ChatRoute.name,
           path: '/chat-page',
           args: ChatRouteArgs(
             key: key,
             userData: userData,
+            contactData: contactData,
+            roomId: roomId,
+            receiverRoomId: receiverRoomId,
           ),
         );
 
@@ -187,15 +196,24 @@ class ChatRouteArgs {
   const ChatRouteArgs({
     this.key,
     required this.userData,
+    required this.contactData,
+    required this.roomId,
+    required this.receiverRoomId,
   });
 
   final _i8.Key? key;
 
   final _i9.UserData userData;
 
+  final _i9.UserData contactData;
+
+  final String roomId;
+
+  final String receiverRoomId;
+
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, userData: $userData}';
+    return 'ChatRouteArgs{key: $key, userData: $userData, contactData: $contactData, roomId: $roomId, receiverRoomId: $receiverRoomId}';
   }
 }
 

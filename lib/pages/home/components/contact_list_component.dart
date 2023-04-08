@@ -3,12 +3,14 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/user_data/user_data.dart';
 
 class ContactListComponent extends StatefulWidget {
 
   final List<Contact> contactList;
+  final UserData userData;
 
-  const ContactListComponent({Key? key, required this.contactList}) : super(key: key);
+  const ContactListComponent({Key? key, required this.contactList, required this.userData}) : super(key: key);
 
   @override
   State<ContactListComponent> createState() => _ContactListComponentState();
@@ -25,7 +27,7 @@ class _ContactListComponentState extends State<ContactListComponent> {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            context.router.push(ChatRoute(userData: widget.contactList[index].userData!));
+            //context.router.push(ChatRoute(userData: widget.userData, contactData: widget.contactList[index].userData!));
           },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 5, 10),

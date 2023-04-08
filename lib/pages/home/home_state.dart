@@ -48,3 +48,8 @@ class ContactListLoaded extends HomeState {
   final List<Contact> contactList;
   const ContactListLoaded(this.contactList);
 }
+
+class RoomsLoaded extends HomeState {
+  final List<MessageRoom> messageRoomList;
+  const RoomsLoaded(this.messageRoomList);
+}

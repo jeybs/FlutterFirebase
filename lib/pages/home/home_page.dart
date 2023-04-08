@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/message_room/message_room.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:flutter_firebase/pages/home/components/contact_list_component.dart';
 import 'package:flutter_firebase/pages/home/components/message_list_component.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_firebase/ui/home_drawer.dart';
 import 'package:flutter_firebase/ui/loading_dialog.dart';
 import 'package:flutter_firebase/ui/textfields/default_textfield.dart';
 import 'package:flutter_firebase/ui/textfields/primary_textfield.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   UserData? _userData = null;
   late ProgressDialog pd;
   List<Contact> contactList = [];
+  List<MessageRoom> messageRoomList = [];
 
   @override
   void initState() {
@@ -78,12 +81,18 @@ class _HomePageState extends State<HomePage> {
           create: (context) => HomeCubit(),
           child: BlocConsumer<HomeCubit, HomeState>(
             listener: (context, state) {
-              
-              
+
+
               if(state is UserProfileLoaded) {
                 setState(() {
                   _userData = state.userData;
+                  cubit?.getContactList();
+                  cubit?.getRooms();
                 });
+              }
+
+              if(state is RoomsLoaded) {
+                messageRoomList = state.messageRoomList;
               }
               
               if(state is UploadImageSuccess) {
@@ -131,7 +140,10 @@ class _HomePageState extends State<HomePage> {
               if(cubit == null) {
                 cubit = context.read<HomeCubit>();
                 cubit?.loadProfile();
-                cubit?.getContactList();
+              }
+
+              if(state is HomeInitial) {
+                return loadingContainer();
               }
 
               return mainBody();
@@ -160,11 +172,25 @@ class _HomePageState extends State<HomePage> {
             height: 110.0,
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
-            child: ContactListComponent(contactList: contactList),
+            child: ContactListComponent(userData: _userData!, contactList: contactList),
           ),
-          MessageListComponent(contactList: contactList)
+          const SizedBox(height: 10.0),
+          MessageListComponent(userData: _userData!, messageRoomList: messageRoomList)
           // End
         ],
+      ),
+    );
+  }
+
+  Widget loadingContainer() {
+    return Container(
+      height: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.height,
+      child: Center(
+        child: SpinKitRing(
+          color: AppColor.primaryColor,
+          size: 50.0,
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_firebase/data/firebase/firebase_services.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/message_room/message_room.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -70,6 +71,13 @@ class HomeCubit extends Cubit<HomeState> {
     Future.delayed(const Duration(microseconds: 500), () async {
       List<Contact> contactList = await _firebaseServices.getUserContacts();
       emit(ContactListLoaded(contactList));
+    });
+  }
+
+  getRooms() {
+    Future.delayed(const Duration(microseconds: 500), () async {
+      List<MessageRoom> messageRoomList = await _firebaseServices.getMyRooms();
+      emit(RoomsLoaded(messageRoomList));
     });
   }
 }
