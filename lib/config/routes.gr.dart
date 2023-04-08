@@ -14,8 +14,7 @@
 import 'package:auto_route/auto_route.dart' as _i7;
 import 'package:flutter/material.dart' as _i8;
 
-import '../models/contact_data/contact.dart' as _i9;
-import '../models/user_data/user_data.dart' as _i10;
+import '../models/user_data/user_data.dart' as _i9;
 import '../pages/chat/chat_page.dart' as _i5;
 import '../pages/home/home_page.dart' as _i4;
 import '../pages/login/login_page.dart' as _i2;
@@ -61,7 +60,7 @@ class Routes extends _i7.RootStackRouter {
         routeData: routeData,
         child: _i5.ChatPage(
           key: args.key,
-          contact: args.contact,
+          userData: args.userData,
         ),
       );
     },
@@ -171,13 +170,13 @@ class HomeRoute extends _i7.PageRouteInfo<void> {
 class ChatRoute extends _i7.PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     _i8.Key? key,
-    required _i9.Contact contact,
+    required _i9.UserData userData,
   }) : super(
           ChatRoute.name,
           path: '/chat-page',
           args: ChatRouteArgs(
             key: key,
-            contact: contact,
+            userData: userData,
           ),
         );
 
@@ -187,16 +186,16 @@ class ChatRoute extends _i7.PageRouteInfo<ChatRouteArgs> {
 class ChatRouteArgs {
   const ChatRouteArgs({
     this.key,
-    required this.contact,
+    required this.userData,
   });
 
   final _i8.Key? key;
 
-  final _i9.Contact contact;
+  final _i9.UserData userData;
 
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, contact: $contact}';
+    return 'ChatRouteArgs{key: $key, userData: $userData}';
   }
 }
 
@@ -205,7 +204,7 @@ class ChatRouteArgs {
 class UserInfoRoute extends _i7.PageRouteInfo<UserInfoRouteArgs> {
   UserInfoRoute({
     _i8.Key? key,
-    required _i10.UserData userData,
+    required _i9.UserData userData,
   }) : super(
           UserInfoRoute.name,
           path: '/user-info-page',
@@ -226,7 +225,7 @@ class UserInfoRouteArgs {
 
   final _i8.Key? key;
 
-  final _i10.UserData userData;
+  final _i9.UserData userData;
 
   @override
   String toString() {

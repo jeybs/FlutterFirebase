@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
 import 'package:flutter_firebase/models/contact_data/contact_data.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
+import 'package:flutter_firebase/utils/date_utils.dart';
 
 class FirebaseServices {
 
@@ -141,10 +142,7 @@ class FirebaseServices {
       for(var snapshot in snapshot.docs) {
         Contact contact = Contact(
             userData: await searchUserByUid(snapshot.id),
-            lastMessage: snapshot.data()['last_message'],
-            lastMessageDate: snapshot.data()['last_message_date'],
-            fromId: snapshot.data()['from_id'],
-            toId: snapshot.data()['to_id']);
+            dateAdded: MyDateUtils.formatTimestamp(snapshot.data()['date_added']));
 
         contactList.add(contact);
       }

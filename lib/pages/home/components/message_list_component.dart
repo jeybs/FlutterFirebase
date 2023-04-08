@@ -1,29 +1,49 @@
+
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
 
+class MessageListComponent extends StatefulWidget {
 
-class ContactListItem extends StatefulWidget {
+  final List<Contact> contactList;
 
-  final Contact contact;
-
-  const ContactListItem({Key? key, required this.contact}) : super(key: key);
+  const MessageListComponent({Key? key, required this.contactList}) : super(key: key);
 
   @override
-  State<ContactListItem> createState() => _ContactListItemState();
+  State<MessageListComponent> createState() => _MessageListComponentState();
 }
 
-class _ContactListItemState extends State<ContactListItem> {
+class _MessageListComponentState extends State<MessageListComponent> {
   @override
   Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: widget.contactList.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            context.router.push(ChatRoute(userData: widget.contactList[index].userData!));
+          },
+          child: messageItem(widget.contactList[index]),
+        );
+      },
+    );
+  }
+
+  Widget messageItem(Contact contact) {
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       child: Row(
         children: [
           Container(
-            width: 65.0,
-            child: profileImage(),
+            width: 60.0,
+            height: 60.0,
+            child: profileImage(contact),
           ),
           const SizedBox(width: 10.0,),
           Expanded(
@@ -34,11 +54,11 @@ class _ContactListItemState extends State<ContactListItem> {
                 FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    widget.contact.userData!.name,
+                    contact.userData!.name,
                     style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.black,
-                      fontFamily: AppFonts.sfuitextmedium
+                        fontSize: 18.0,
+                        color: Colors.black,
+                        fontFamily: AppFonts.sfuitextmedium
                     ),
                   ),
                 ),
@@ -55,10 +75,10 @@ class _ContactListItemState extends State<ContactListItem> {
               ],
             ),
           ),
-          if("lastdate".isNotEmpty) Container(
+          if("Date".isNotEmpty) Container(
             alignment: Alignment.centerRight,
             child: Text(
-              "lastdate",
+              "12/14",
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.black,
@@ -71,10 +91,10 @@ class _ContactListItemState extends State<ContactListItem> {
     );
   }
 
-  Widget profileImage() {
-    if(widget.contact.userData!.photo.isNotEmpty) {
+  Widget profileImage(Contact contact) {
+    if(contact.userData!.photo.isNotEmpty) {
       return ExtendedImage.network(
-        widget.contact.userData!.photo,
+        contact.userData!.photo,
         width: MediaQuery.of(context).size.width,
         fit: BoxFit.fitWidth,
         cache: true,

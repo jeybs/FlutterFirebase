@@ -67,7 +67,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   getContactList() {
-    Future.delayed(const Duration(seconds: 1), () async {
+    Future.delayed(const Duration(microseconds: 500), () async {
       List<Contact> contactList = await _firebaseServices.getUserContacts();
       emit(ContactListLoaded(contactList));
     });

@@ -6,6 +6,8 @@ import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
+import 'package:flutter_firebase/pages/home/components/contact_list_component.dart';
+import 'package:flutter_firebase/pages/home/components/message_list_component.dart';
 import 'package:flutter_firebase/pages/home/home_cubit.dart';
 import 'package:flutter_firebase/ui/appbar/home_appbar.dart';
 import 'package:flutter_firebase/ui/contacts/contact_list_item.dart';
@@ -24,7 +26,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage> {
 
   HomeCubit? cubit;
   UserData? _userData = null;
@@ -143,6 +145,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   Widget mainBody() {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DefaultTextField(
             label: 'Search Conversation',
@@ -152,25 +155,17 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             isPasswordField: false,
             prefixIcon: Icon(Icons.search, color: AppColor.primaryColor,)
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: contactList.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  context.router.push(ChatRoute(contact: contactList[index]));
-                },
-                child: ContactListItem(contact: contactList[index]),
-              );
-            },
-          )
+          // Start Contact shortcut
+          if(contactList.isNotEmpty) Container(
+            height: 110.0,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: ContactListComponent(contactList: contactList),
+          ),
+          MessageListComponent(contactList: contactList)
+          // End
         ],
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

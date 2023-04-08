@@ -21,14 +21,8 @@ Contact _$ContactFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Contact {
   UserData? get userData => throw _privateConstructorUsedError;
-  @JsonKey(name: 'last_message')
-  String get lastMessage => throw _privateConstructorUsedError;
-  @JsonKey(name: 'last_message_date')
-  String get lastMessageDate => throw _privateConstructorUsedError;
-  @JsonKey(name: 'from_id')
-  String get fromId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'to_id')
-  String get toId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'date_added')
+  String get dateAdded => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,11 +35,7 @@ abstract class $ContactCopyWith<$Res> {
       _$ContactCopyWithImpl<$Res, Contact>;
   @useResult
   $Res call(
-      {UserData? userData,
-      @JsonKey(name: 'last_message') String lastMessage,
-      @JsonKey(name: 'last_message_date') String lastMessageDate,
-      @JsonKey(name: 'from_id') String fromId,
-      @JsonKey(name: 'to_id') String toId});
+      {UserData? userData, @JsonKey(name: 'date_added') String dateAdded});
 
   $UserDataCopyWith<$Res>? get userData;
 }
@@ -64,31 +54,16 @@ class _$ContactCopyWithImpl<$Res, $Val extends Contact>
   @override
   $Res call({
     Object? userData = freezed,
-    Object? lastMessage = null,
-    Object? lastMessageDate = null,
-    Object? fromId = null,
-    Object? toId = null,
+    Object? dateAdded = null,
   }) {
     return _then(_value.copyWith(
       userData: freezed == userData
           ? _value.userData
           : userData // ignore: cast_nullable_to_non_nullable
               as UserData?,
-      lastMessage: null == lastMessage
-          ? _value.lastMessage
-          : lastMessage // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastMessageDate: null == lastMessageDate
-          ? _value.lastMessageDate
-          : lastMessageDate // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromId: null == fromId
-          ? _value.fromId
-          : fromId // ignore: cast_nullable_to_non_nullable
-              as String,
-      toId: null == toId
-          ? _value.toId
-          : toId // ignore: cast_nullable_to_non_nullable
+      dateAdded: null == dateAdded
+          ? _value.dateAdded
+          : dateAdded // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -114,11 +89,7 @@ abstract class _$$_ContactCopyWith<$Res> implements $ContactCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {UserData? userData,
-      @JsonKey(name: 'last_message') String lastMessage,
-      @JsonKey(name: 'last_message_date') String lastMessageDate,
-      @JsonKey(name: 'from_id') String fromId,
-      @JsonKey(name: 'to_id') String toId});
+      {UserData? userData, @JsonKey(name: 'date_added') String dateAdded});
 
   @override
   $UserDataCopyWith<$Res>? get userData;
@@ -135,31 +106,16 @@ class __$$_ContactCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userData = freezed,
-    Object? lastMessage = null,
-    Object? lastMessageDate = null,
-    Object? fromId = null,
-    Object? toId = null,
+    Object? dateAdded = null,
   }) {
     return _then(_$_Contact(
       userData: freezed == userData
           ? _value.userData
           : userData // ignore: cast_nullable_to_non_nullable
               as UserData?,
-      lastMessage: null == lastMessage
-          ? _value.lastMessage
-          : lastMessage // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastMessageDate: null == lastMessageDate
-          ? _value.lastMessageDate
-          : lastMessageDate // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromId: null == fromId
-          ? _value.fromId
-          : fromId // ignore: cast_nullable_to_non_nullable
-              as String,
-      toId: null == toId
-          ? _value.toId
-          : toId // ignore: cast_nullable_to_non_nullable
+      dateAdded: null == dateAdded
+          ? _value.dateAdded
+          : dateAdded // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -169,11 +125,7 @@ class __$$_ContactCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Contact implements _Contact {
   const _$_Contact(
-      {this.userData = null,
-      @JsonKey(name: 'last_message') this.lastMessage = "",
-      @JsonKey(name: 'last_message_date') this.lastMessageDate = "",
-      @JsonKey(name: 'from_id') this.fromId = "",
-      @JsonKey(name: 'to_id') this.toId = ""});
+      {this.userData = null, @JsonKey(name: 'date_added') this.dateAdded = ""});
 
   factory _$_Contact.fromJson(Map<String, dynamic> json) =>
       _$$_ContactFromJson(json);
@@ -182,21 +134,12 @@ class _$_Contact implements _Contact {
   @JsonKey()
   final UserData? userData;
   @override
-  @JsonKey(name: 'last_message')
-  final String lastMessage;
-  @override
-  @JsonKey(name: 'last_message_date')
-  final String lastMessageDate;
-  @override
-  @JsonKey(name: 'from_id')
-  final String fromId;
-  @override
-  @JsonKey(name: 'to_id')
-  final String toId;
+  @JsonKey(name: 'date_added')
+  final String dateAdded;
 
   @override
   String toString() {
-    return 'Contact(userData: $userData, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, fromId: $fromId, toId: $toId)';
+    return 'Contact(userData: $userData, dateAdded: $dateAdded)';
   }
 
   @override
@@ -206,18 +149,13 @@ class _$_Contact implements _Contact {
             other is _$_Contact &&
             (identical(other.userData, userData) ||
                 other.userData == userData) &&
-            (identical(other.lastMessage, lastMessage) ||
-                other.lastMessage == lastMessage) &&
-            (identical(other.lastMessageDate, lastMessageDate) ||
-                other.lastMessageDate == lastMessageDate) &&
-            (identical(other.fromId, fromId) || other.fromId == fromId) &&
-            (identical(other.toId, toId) || other.toId == toId));
+            (identical(other.dateAdded, dateAdded) ||
+                other.dateAdded == dateAdded));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, userData, lastMessage, lastMessageDate, fromId, toId);
+  int get hashCode => Object.hash(runtimeType, userData, dateAdded);
 
   @JsonKey(ignore: true)
   @override
@@ -236,27 +174,15 @@ class _$_Contact implements _Contact {
 abstract class _Contact implements Contact {
   const factory _Contact(
       {final UserData? userData,
-      @JsonKey(name: 'last_message') final String lastMessage,
-      @JsonKey(name: 'last_message_date') final String lastMessageDate,
-      @JsonKey(name: 'from_id') final String fromId,
-      @JsonKey(name: 'to_id') final String toId}) = _$_Contact;
+      @JsonKey(name: 'date_added') final String dateAdded}) = _$_Contact;
 
   factory _Contact.fromJson(Map<String, dynamic> json) = _$_Contact.fromJson;
 
   @override
   UserData? get userData;
   @override
-  @JsonKey(name: 'last_message')
-  String get lastMessage;
-  @override
-  @JsonKey(name: 'last_message_date')
-  String get lastMessageDate;
-  @override
-  @JsonKey(name: 'from_id')
-  String get fromId;
-  @override
-  @JsonKey(name: 'to_id')
-  String get toId;
+  @JsonKey(name: 'date_added')
+  String get dateAdded;
   @override
   @JsonKey(ignore: true)
   _$$_ContactCopyWith<_$_Contact> get copyWith =>
