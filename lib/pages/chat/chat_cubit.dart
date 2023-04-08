@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_firebase/data/firebase/firebase_services.dart';
 import 'package:flutter_firebase/models/message/message.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
+import 'package:flutter_firebase/utils/date_utils.dart';
 import 'package:meta/meta.dart';
 
 part 'chat_state.dart';
@@ -50,11 +51,34 @@ class ChatCubit extends Cubit<ChatState> {
 
       // Create my message
       await _firebaseServices.createMessage(myRoomid, message, fromId, toId, fieldValue);
+      await _firebaseServices.markRoomAsRead(myRoomid, true);
 
       // Create message to contact
       await _firebaseServices.createMessage(receiverRoomId, message, fromId, toId, fieldValue);
+      await _firebaseServices.markRoomAsRead(receiverRoomId, false);
 
-      //emit(UserProfileLoaded(userData));
+      emit(MessageSent());
+    });
+  }
+
+  listenToMessageUpdate(String roomId) {
+    _firebaseServices.startListening(roomId).listen((event) async {
+      if(event.size > 0) {
+        List<Message> messageList = [];
+        for(var docsData in event.docs) {
+          Message message = Message(
+              message: docsData.data()['message'],
+              messageDate: MyDateUtils.formatTimeStampToDateTime(docsData.data()['message_date']),
+              fromId: docsData.data()['from_id'],
+              toId: docsData.data()['to_id']);
+
+          messageList.add(message);
+        }
+
+        await _firebaseServices.markRoomAsRead(roomId, true);
+
+        emit(NewMessageUpdate(messageList));
+      }
     });
   }
 }

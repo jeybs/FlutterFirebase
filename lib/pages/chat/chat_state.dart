@@ -18,3 +18,12 @@ class MessageLoaded extends ChatState {
   final List<Message> messageList;
   const MessageLoaded(this.messageList);
 }
+
+class NewMessageUpdate extends ChatState {
+  final List<Message> messageList;
+  const NewMessageUpdate(this.messageList);
+}
+
+class MessageSent extends ChatState {
+  const MessageSent();
+}

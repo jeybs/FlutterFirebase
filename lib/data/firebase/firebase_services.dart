@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -326,5 +327,21 @@ class FirebaseServices {
     }
 
     return "";
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> startListening(String roomId) {
+    return firestoreInstance.collection(_messageCollections).doc(roomId)
+        .collection(_messageListcollection)
+        .orderBy('message_date')
+        .snapshots();
+  }
+
+  Future<void> markRoomAsRead(String roomId, bool isRead) async {
+    final roomCollection = firestoreInstance.collection(_messageCollections)
+        .doc(roomId);
+
+    await roomCollection.update({
+      'is_read': isRead
+    });
   }
 }

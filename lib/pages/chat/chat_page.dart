@@ -32,20 +32,11 @@ class _ChatPageState extends State<ChatPage> {
   ChatCubit? cubit;
   List<Message> messageList = [];
   String roomId = "";
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     print("Room ID => ${widget.roomId}");
-    // for(var i = 1; i <= 10; i++) {
-    //   late Message _message;
-    //   if(i.isEven) {
-    //     _message = Message(fromId: "1", toId: "2", message: "Message ${DateTime.now().millisecondsSinceEpoch}", messageDate: DateTime(2023, 1, i));
-    //   } else {
-    //     _message = Message(fromId: "2", toId: "1", message: "Message", messageDate: DateTime(2023, 1, i));
-    //   }
-    //
-    //   messageList.add(_message);
-    // }
     super.initState();
   }
 
@@ -59,14 +50,23 @@ class _ChatPageState extends State<ChatPage> {
           child: BlocConsumer<ChatCubit, ChatState>(
             listener: (context, state) {
               if(state is MessageLoaded) {
+                //messageList = state.messageList;
+                //cubit?.listenToMessageUpdate(widget.roomId);
+              }
+
+              if(state is NewMessageUpdate) {
                 messageList = state.messageList;
+              }
+
+              if(state is MessageSent) {
+
               }
             },
             builder: (context, state) {
               if(cubit == null) {
                 cubit = context.read<ChatCubit>();
-                //cubit?.loadProfile();
-                cubit?.getMessages(widget.userData.uid, widget.contactData.uid, widget.roomId);
+                cubit?.listenToMessageUpdate(widget.roomId);
+                //cubit?.getMessages(widget.userData.uid, widget.contactData.uid, widget.roomId);
               }
 
               return mainBody();
@@ -93,7 +93,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             groupHeaderBuilder: (message) {
               return Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 height: 40.0,
                 child: Center(
                   child: Card(
@@ -136,15 +136,41 @@ class _ChatPageState extends State<ChatPage> {
           child: Row(
             children: [
               Expanded(
-                child: DefaultTextField(
-                  label: 'Message',
-                  onTextChanged: (value) {
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    hintText: 'Message',
+                    labelText: 'Message',
+                    labelStyle: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey[400]
+                    ),
+                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey[500]),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  onChanged: (value) {
                     setState(() {
                       message = value;
                     });
                   },
-                  isPasswordField: false,
-                  isMultiLine: true,
                 ),
               ),
               Container(
@@ -155,6 +181,11 @@ class _ChatPageState extends State<ChatPage> {
                     if(message.isNotEmpty) {
                       // Send message
                       cubit?.sendMessage(message, widget.userData.uid, widget.contactData.uid, widget.roomId, widget.receiverRoomId);
+
+                      setState(() {
+                        message = "";
+                        controller.text = message;
+                      });
                     }
                   },
                 ),
