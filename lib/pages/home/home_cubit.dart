@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_firebase/data/firebase/firebase_services.dart';
-import 'package:flutter_firebase/models/user_data.dart';
+import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
@@ -20,7 +21,6 @@ class HomeCubit extends Cubit<HomeState> {
   loadProfile() {
     Future.delayed(Duration(microseconds: 500), () async {
       UserData? userData = await _firebaseServices.getUserData();
-      print("UserData => ${userData!.toMap()}");
       emit(UserProfileLoaded(userData));
     });
   }
@@ -37,8 +37,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   uploadUserImage(XFile imageSelected) async {
-    print("Path => ${imageSelected.path}");
-
     String? uid = _firebaseServices.getUserId();
 
     String _newImageName = "${uid}.jpg";
@@ -63,7 +61,15 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  searchUserByEmail(String email) {
-    _firebaseServices.searchUser(email);
+  searchUserByEmail(String email) async {
+    UserData? userData = await _firebaseServices.searchUser(email);
+    emit(SearchUserData(userData));
+  }
+
+  getContactList() {
+    Future.delayed(const Duration(seconds: 1), () async {
+      List<Contact> contactList = await _firebaseServices.getUserContacts();
+      emit(ContactListLoaded(contactList));
+    });
   }
 }

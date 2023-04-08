@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
+import 'package:flutter_firebase/models/contact_data/contact.dart';
 import 'package:flutter_firebase/models/message.dart';
 import 'package:flutter_firebase/ui/appbar/primary_appbar.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
@@ -10,7 +11,10 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+
+  final Contact contact;
+
+  const ChatPage({Key? key, required this.contact}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -38,7 +42,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PrimaryAppbar.getDefaultAppBar(context, "Chat Title"),
+      appBar: PrimaryAppbar.getDefaultAppBar(context, widget.contact.userData!.name),
       body: Container(
         child: Column(
           children: [

@@ -7,6 +7,9 @@ Sample Flutter project using firebase authentication, signup
 1. This Project is using auto_route package
  - run 'flutter packages pub run build_runner build' every new pages/screens created
 
+2, This project is using freezed package
+ - run 'flutter pub run build_runner build --delete-conflicting-outputs' to generate freezed files
+
 [//]: # (A few resources to get you started if this is your first Flutter project:)
 
 [//]: # ()

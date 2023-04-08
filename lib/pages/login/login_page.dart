@@ -18,13 +18,15 @@ class LoginPage extends StatelessWidget {
   LoginCubit? cubit;
   String email = "";
   String password = "";
+  late BuildContext _context;
 
   LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: true);
+    _context = context;
+
 
     return Scaffold(
       body: Stack(
@@ -113,7 +115,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 25.0),
             PrimaryButton(label: 'Login', onButtonClick: () {
-
+              pd = ProgressDialog(_context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: true);
               pd.style(
                   message: "Logging In...",
                   progressWidget: const LoadingDialog());

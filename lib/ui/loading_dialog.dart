@@ -8,7 +8,7 @@ class LoadingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpinKitFadingCircle(
+    return SpinKitRing(
       color: AppColor.primaryColor,
       size: 50.0,
     );

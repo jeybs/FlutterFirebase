@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
-import 'package:flutter_firebase/models/user_data.dart';
+import 'package:flutter_firebase/models/contact_data/contact.dart';
+import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:flutter_firebase/pages/home/home_cubit.dart';
 import 'package:flutter_firebase/ui/appbar/home_appbar.dart';
 import 'package:flutter_firebase/ui/contacts/contact_list_item.dart';
@@ -23,11 +24,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   HomeCubit? cubit;
   UserData? _userData = null;
   late ProgressDialog pd;
+  List<Contact> contactList = [];
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: HomeAppbar.getDefaultAppBar(context, 'Contact List', () {
         showDialog(
@@ -102,6 +105,22 @@ class _HomePageState extends State<HomePage> {
                 pd.hide();
               }
 
+              // Search user state
+              if(state is SearchUserData) {
+                if(state.userData != null) {
+                  context.router.push(UserInfoRoute(userData: state.userData!));
+                } else {
+                  showOkAlertDialog(
+                      context: context,
+                      title: "Oops!",
+                      message: "Email address not found");
+                }
+              }
+
+              if(state is ContactListLoaded) {
+                contactList = state.contactList;
+              }
+
               if(state is UserLogout) {
                 context.router.pushAndPopUntil(LoginRoute(), predicate: (_) => false);
               }
@@ -110,6 +129,7 @@ class _HomePageState extends State<HomePage> {
               if(cubit == null) {
                 cubit = context.read<HomeCubit>();
                 cubit?.loadProfile();
+                cubit?.getContactList();
               }
 
               return mainBody();
@@ -135,14 +155,14 @@ class _HomePageState extends State<HomePage> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 10,
+            itemCount: contactList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  context.router.push(const ChatRoute());
+                  context.router.push(ChatRoute(contact: contactList[index]));
                 },
-                child: const ContactListItem(),
+                child: ContactListItem(contact: contactList[index]),
               );
             },
           )
@@ -150,4 +170,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

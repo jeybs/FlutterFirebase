@@ -34,14 +34,12 @@ class _SignUpPageState extends State<SignUpPage> {
   String confirmPassword = "";
   bool termAgreement = false;
 
-  @override
-  void initState() {
-    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: false);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: true);
+
     return Scaffold(
       appBar: PrimaryAppbar.getDefaultAppBar(context, ""),
       body: Container(

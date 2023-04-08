@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/constant/app_fonts.dart';
 import 'package:flutter_firebase/data/firebase/firebase_services.dart';
-import 'package:flutter_firebase/models/user_data.dart';
+import 'package:flutter_firebase/models/user_data/user_data.dart';
 import 'package:flutter_firebase/pages/home/home_cubit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,7 +55,21 @@ class HomeDrawer {
                 height: 50.0,
               ),
               ListTile(
-                leading: Icon(Icons.logout, color: Colors.white,),
+                leading: const Icon(Icons.contact_mail, color: Colors.white,),
+                onTap: () {
+
+                },
+                title: Text(
+                  'Contact List',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontFamily: AppFonts.sfuitextmedium
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.white,),
                 onTap: () {
                   cubit?.logout();
                 },

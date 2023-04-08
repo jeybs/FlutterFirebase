@@ -34,3 +34,17 @@ class UpdateUserProfilePhotoSuccess extends HomeState {
 class UpdateUserProfilePhotoFail extends HomeState {
   const UpdateUserProfilePhotoFail();
 }
+
+class SearchUserData extends HomeState {
+  final UserData? userData;
+  const SearchUserData(this.userData);
+}
+
+class ContactListLoading extends HomeState {
+  const ContactListLoading();
+}
+
+class ContactListLoaded extends HomeState {
+  final List<Contact> contactList;
+  const ContactListLoaded(this.contactList);
+}
