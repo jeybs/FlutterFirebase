@@ -23,3 +23,9 @@ class UserAdded extends UserInfoState {
   final bool isAdded;
   const UserAdded(this.isAdded);
 }
+
+class RoomCreated extends UserInfoState {
+  final String myRoomId;
+  final String receiverRoomId;
+  const RoomCreated(this.myRoomId, this.receiverRoomId);
+}

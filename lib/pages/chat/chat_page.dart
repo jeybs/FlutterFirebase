@@ -35,6 +35,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
+    print("Room ID => ${widget.roomId}");
     // for(var i = 1; i <= 10; i++) {
     //   late Message _message;
     //   if(i.isEven) {
@@ -113,8 +114,10 @@ class _ChatPageState extends State<ChatPage> {
               );
             },
             itemBuilder: (context, Message message) {
+              print("message to => ${message.fromId}");
+              print("my to => ${widget.userData.uid}");
               return Align(
-                alignment: int.parse(message.fromId).isEven ? Alignment.centerRight : Alignment.centerLeft,
+                alignment: message.fromId == widget.userData.uid ? Alignment.centerRight : Alignment.centerLeft,
                 child: Card(
                   elevation: 8,
                   child:  Container(

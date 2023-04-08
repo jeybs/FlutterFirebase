@@ -34,4 +34,23 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
     });
   }
+
+  createRoom(String toId, String fromId) {
+    Future.delayed(const Duration(microseconds: 500), () async {
+      bool hasChatted = await _firebaseServices.isUserAlreadyChat(toId, fromId);
+      if(hasChatted) {
+        // Go to room
+        String myRoomId = await _firebaseServices.getRoomId(toId, fromId);
+        String receivedRoomId = await _firebaseServices.getRoomId(fromId, toId);
+
+        emit(RoomCreated(myRoomId, receivedRoomId));
+      } else {
+        // Create room
+        String myRoomId = await _firebaseServices.createRoom(toId, fromId);
+        String receivedRoomId = await _firebaseServices.createRoom(fromId, toId);
+
+        emit(RoomCreated(myRoomId, receivedRoomId));
+      }
+    });
+  }
 }

@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase/config/routes.gr.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
 import 'package:flutter_firebase/models/contact_data/contact_data.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
@@ -25,7 +27,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   UserInfoCubit? cubit;
   bool isAdded = true;
   late ProgressDialog pd;
-  UserData? userData;
+  UserData? myUserData;
 
   @override
   void initState() {
@@ -53,12 +55,16 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   }
 
                   if(state is UserProfileLoaded) {
-                    userData = state.userData;
-                    if(userData!.uid != widget.userData.uid) {
+                    myUserData = state.userData;
+                    if(myUserData!.uid != widget.userData.uid) {
                       cubit?.checkIfAlreadyAdded(widget.userData.uid);
                     } else {
                       isAdded = true;
                     }
+                  }
+
+                  if(state is RoomCreated) {
+                    context.router.push(ChatRoute(userData: myUserData!, contactData: widget.userData, roomId: state.myRoomId, receiverRoomId: state.receiverRoomId));
                   }
 
                   if(state is UserAdded) {
@@ -134,7 +140,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             actionButtons('assets/icon_message.png', 'Message', () {
+              pd.style(
+                  message: "Loading...",
+                  progressWidget: const LoadingDialog());
 
+              pd.show();
+              cubit?.createRoom(myUserData!.uid, widget.userData.uid);
             }),
             if(!isAdded) actionButtons('assets/icon_add_contact.png', 'Save', () {
               pd.style(

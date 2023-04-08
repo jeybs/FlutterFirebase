@@ -189,12 +189,10 @@ class FirebaseServices {
     String uid = authInstance.currentUser!.uid;
     final snapshot = await firestoreInstance.collection(_userCollection).doc(uid)
         .collection(_contactCollections)
-        .where('from_id', isEqualTo: contactId)
+        .doc(contactId)
         .get(const GetOptions(source: Source.server));
 
-    print(snapshot.size);
-    if(snapshot.docs.isNotEmpty) {
-
+    if(snapshot.exists) {
       return true;
     }
 
@@ -213,7 +211,7 @@ class FirebaseServices {
     });
   }
 
-  Future<void> createMessage(String roomId, String message, String toId, String fromId, FieldValue fieldValue) async {
+  Future<void> createMessage(String roomId, String message, String fromId, String toId, FieldValue fieldValue) async {
     final messageCollection = firestoreInstance.collection(_messageCollections)
         .doc(roomId)
         .collection(_messageListcollection)
@@ -271,6 +269,7 @@ class FirebaseServices {
     final collectionRef = await firestoreInstance.collection(_messageCollections)
         .doc(roomId)
         .collection(_messageListcollection)
+        .orderBy('message_date')
         .get(const GetOptions(source: Source.server));
 
     List<Message> messageList = [];
@@ -279,7 +278,7 @@ class FirebaseServices {
       for(var docsData in collectionRef.docs) {
         Message message = Message(
           message: docsData.data()['message'],
-          messageDate: docsData.data()['message_date'],
+          messageDate: MyDateUtils.formatTimeStampToDateTime(docsData.data()['message_date']),
           fromId: docsData.data()['from_id'],
           toId: docsData.data()['to_id']);
 
@@ -306,7 +305,7 @@ class FirebaseServices {
           lastMessageDate: docsData.data()['last_message_date'] != "" ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
           toId: docsData.data()['to_id'],
           roomId: docsData.id,
-          receiverRoomId: await getReceiverRoomId(docsData.data()['from_id'], docsData.data()['to_id'])
+          receiverRoomId: await getRoomId(docsData.data()['from_id'], docsData.data()['to_id'])
         );
         
         roomList.add(room);
@@ -316,7 +315,7 @@ class FirebaseServices {
     return roomList;
   }
 
-  Future<String> getReceiverRoomId(String fromId, String toId)async {
+  Future<String> getRoomId(String fromId, String toId)async {
     final receiverRoomCollection = await firestoreInstance.collection(_messageCollections)
         .where('from_id', isEqualTo: toId)
         .where('to_id', isEqualTo: fromId)

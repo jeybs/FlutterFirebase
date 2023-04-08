@@ -38,17 +38,18 @@ class ChatCubit extends Cubit<ChatState> {
         messageList = await _firebaseServices.getMessages(myRoomId);
       }
 
+      print("Message Length => ${messageList.length}");
       emit(MessageLoaded(messageList));
     });
   }
 
-  sendMessage(String message, String toId, String fromId, String myRoomid, String receiverRoomId) {
+  sendMessage(String message, String fromId, String toId, String myRoomid, String receiverRoomId) {
     Future.delayed(const Duration(microseconds: 500), () async {
 
       FieldValue fieldValue = FieldValue.serverTimestamp();
 
       // Create my message
-      await _firebaseServices.createMessage(myRoomid, message, toId, fromId, fieldValue);
+      await _firebaseServices.createMessage(myRoomid, message, fromId, toId, fieldValue);
 
       // Create message to contact
       await _firebaseServices.createMessage(receiverRoomId, message, fromId, toId, fieldValue);
