@@ -12,6 +12,7 @@ class MessageRoom with _$MessageRoom {
     @Default(null) UserData? userData,
     @JsonKey(name: 'last_message') @Default("") String lastMessage,
     @JsonKey(name: 'last_message_date') @Default("") String lastMessageDate,
+    @JsonKey(name: 'attachment') @Default("") String attachment,
     @JsonKey(name: 'from_id') @Default("") String fromId,
     @JsonKey(name: 'to_id') @Default("") String toId,
     @JsonKey(name: 'room_id') @Default("") String roomId,

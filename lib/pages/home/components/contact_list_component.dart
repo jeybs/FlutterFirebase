@@ -27,7 +27,7 @@ class _ContactListComponentState extends State<ContactListComponent> {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            //context.router.push(ChatRoute(userData: widget.userData, contactData: widget.contactList[index].userData!));
+            context.router.push(UserInfoRoute(userData: widget.contactList[index].userData!));
           },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 5, 10),

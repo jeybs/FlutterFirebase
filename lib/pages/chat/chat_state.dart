@@ -27,3 +27,12 @@ class NewMessageUpdate extends ChatState {
 class MessageSent extends ChatState {
   const MessageSent();
 }
+
+class UploadSuccess extends ChatState {
+  const UploadSuccess();
+}
+
+class UploadFailed extends ChatState {
+  final String message;
+  const UploadFailed(this.message);
+}

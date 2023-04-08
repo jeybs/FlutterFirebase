@@ -22,6 +22,8 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 mixin _$Message {
   @JsonKey(name: 'message')
   String get message => throw _privateConstructorUsedError;
+  @JsonKey(name: 'attachment')
+  String get attachment => throw _privateConstructorUsedError;
   @JsonKey(name: 'message_date')
   DateTime? get messageDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'from_id')
@@ -41,6 +43,7 @@ abstract class $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'message') String message,
+      @JsonKey(name: 'attachment') String attachment,
       @JsonKey(name: 'message_date') DateTime? messageDate,
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId});
@@ -60,6 +63,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   @override
   $Res call({
     Object? message = null,
+    Object? attachment = null,
     Object? messageDate = freezed,
     Object? fromId = null,
     Object? toId = null,
@@ -68,6 +72,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
               as String,
       messageDate: freezed == messageDate
           ? _value.messageDate
@@ -94,6 +102,7 @@ abstract class _$$_MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'message') String message,
+      @JsonKey(name: 'attachment') String attachment,
       @JsonKey(name: 'message_date') DateTime? messageDate,
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId});
@@ -110,6 +119,7 @@ class __$$_MessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
+    Object? attachment = null,
     Object? messageDate = freezed,
     Object? fromId = null,
     Object? toId = null,
@@ -118,6 +128,10 @@ class __$$_MessageCopyWithImpl<$Res>
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
               as String,
       messageDate: freezed == messageDate
           ? _value.messageDate
@@ -140,6 +154,7 @@ class __$$_MessageCopyWithImpl<$Res>
 class _$_Message implements _Message {
   const _$_Message(
       {@JsonKey(name: 'message') this.message = "",
+      @JsonKey(name: 'attachment') this.attachment = "",
       @JsonKey(name: 'message_date') this.messageDate = null,
       @JsonKey(name: 'from_id') this.fromId = "",
       @JsonKey(name: 'to_id') this.toId = ""});
@@ -150,6 +165,9 @@ class _$_Message implements _Message {
   @override
   @JsonKey(name: 'message')
   final String message;
+  @override
+  @JsonKey(name: 'attachment')
+  final String attachment;
   @override
   @JsonKey(name: 'message_date')
   final DateTime? messageDate;
@@ -162,7 +180,7 @@ class _$_Message implements _Message {
 
   @override
   String toString() {
-    return 'Message(message: $message, messageDate: $messageDate, fromId: $fromId, toId: $toId)';
+    return 'Message(message: $message, attachment: $attachment, messageDate: $messageDate, fromId: $fromId, toId: $toId)';
   }
 
   @override
@@ -171,6 +189,8 @@ class _$_Message implements _Message {
         (other.runtimeType == runtimeType &&
             other is _$_Message &&
             (identical(other.message, message) || other.message == message) &&
+            (identical(other.attachment, attachment) ||
+                other.attachment == attachment) &&
             (identical(other.messageDate, messageDate) ||
                 other.messageDate == messageDate) &&
             (identical(other.fromId, fromId) || other.fromId == fromId) &&
@@ -180,7 +200,7 @@ class _$_Message implements _Message {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, message, messageDate, fromId, toId);
+      Object.hash(runtimeType, message, attachment, messageDate, fromId, toId);
 
   @JsonKey(ignore: true)
   @override
@@ -199,6 +219,7 @@ class _$_Message implements _Message {
 abstract class _Message implements Message {
   const factory _Message(
       {@JsonKey(name: 'message') final String message,
+      @JsonKey(name: 'attachment') final String attachment,
       @JsonKey(name: 'message_date') final DateTime? messageDate,
       @JsonKey(name: 'from_id') final String fromId,
       @JsonKey(name: 'to_id') final String toId}) = _$_Message;
@@ -208,6 +229,9 @@ abstract class _Message implements Message {
   @override
   @JsonKey(name: 'message')
   String get message;
+  @override
+  @JsonKey(name: 'attachment')
+  String get attachment;
   @override
   @JsonKey(name: 'message_date')
   DateTime? get messageDate;

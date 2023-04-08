@@ -79,19 +79,24 @@ class HomeCubit extends Cubit<HomeState> {
     Future.delayed(const Duration(microseconds: 500), () async {
       _firebaseServices.getMyRooms().listen((event) async {
         List<MessageRoom> roomList = [];
-        if(event.docs.isNotEmpty) {
-          for(var docsData in event.docs) {
-            MessageRoom room = MessageRoom(
-                userData: await _firebaseServices.searchUserByUid(docsData.data()['from_id']),
-                lastMessage: docsData.data()['last_message'],
-                lastMessageDate: docsData.data()['last_message_date'] != "" ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
-                toId: docsData.data()['to_id'],
-                roomId: docsData.id,
-                receiverRoomId: await _firebaseServices.getRoomId(docsData.data()['from_id'], docsData.data()['to_id']),
-                isRead: docsData.data()['is_read']
-            );
+        if(event.size > 0) {
 
-            roomList.add(room);
+          for(var docsData in event.docs) {
+            //if(docsData.data()['message_date'] != null) {
+              MessageRoom room = MessageRoom(
+                  userData: await _firebaseServices.searchUserByUid(docsData.data()['from_id']),
+                  lastMessage: docsData.data()['last_message'],
+                  attachment: docsData.data()['attachment'] != null ? docsData.data()['attachment'] : "",
+                  lastMessageDate: docsData.data()['last_message_date'] != null ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
+                  toId: docsData.data()['to_id'],
+                  roomId: docsData.id,
+                  receiverRoomId: await _firebaseServices.getRoomId(docsData.data()['from_id'], docsData.data()['to_id']),
+                  isRead: docsData.data()['is_read']
+              );
+
+              roomList.add(room);
+            //}
+
           }
 
           emit(RoomsLoaded(roomList));

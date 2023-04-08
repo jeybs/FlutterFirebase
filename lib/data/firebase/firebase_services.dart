@@ -79,6 +79,13 @@ class FirebaseServices {
     });
   }
 
+  Future<void> updateUser(Map<String, dynamic> updateData) async {
+    String uid = authInstance.currentUser!.uid;
+    final userCollection = firestoreInstance.collection(_userCollection).doc(uid);
+
+    await userCollection.update(updateData);
+  }
+
   Future<bool> isMobileExist(String mobile) async  {
     final snaphshot = await firestoreInstance.collection(_userCollection)
       .where('mobile', isEqualTo: mobile)
@@ -120,6 +127,7 @@ class FirebaseServices {
       return "";
     }
   }
+
 
   Future<bool> updateUserProfilePhoto(String newPath) async {
     String uid = authInstance.currentUser!.uid;
@@ -212,7 +220,7 @@ class FirebaseServices {
     });
   }
 
-  Future<void> createMessage(String roomId, String message, String fromId, String toId, FieldValue fieldValue) async {
+  Future<void> createMessage(String roomId, String message, String fromId, String toId, FieldValue fieldValue, String attachmentLink) async {
     final messageCollection = firestoreInstance.collection(_messageCollections)
         .doc(roomId)
         .collection(_messageListcollection)
@@ -220,6 +228,7 @@ class FirebaseServices {
 
     await messageCollection.set({
       'message': message,
+      'attachment': attachmentLink,
       'message_date': fieldValue,
       'from_id': fromId,
       'to_id': toId
@@ -230,7 +239,8 @@ class FirebaseServices {
 
     await roomCollection.update({
       'last_message': message,
-      'last_message_date': fieldValue
+      'last_message_date': fieldValue,
+      'attachment': attachmentLink,
     });
   }
 
@@ -314,7 +324,7 @@ class FirebaseServices {
   Stream<QuerySnapshot<Map<String, dynamic>>> startMessageListening(String roomId) {
     return firestoreInstance.collection(_messageCollections).doc(roomId)
         .collection(_messageListcollection)
-        .orderBy('message_date')
+        .orderBy('message_date', descending: true)
         .snapshots();
   }
 
@@ -326,5 +336,21 @@ class FirebaseServices {
     await roomCollection.update({
       'is_read': isRead
     });
+  }
+
+  Future<String> uploadAttachment(File pathFile, String imageName) async {
+    try {
+      final imagesRef = fireStorageRef.child("attachments/$imageName");
+      await imagesRef.putFile(pathFile);
+
+      final pathReference = fireStorageRef.child(imagesRef.fullPath);
+      final String imagePath = await pathReference.getDownloadURL();
+
+
+      return imagePath;
+    } on FirebaseException catch (e) {
+      print("Error Uploading => ${e.message}");
+      return "";
+    }
   }
 }

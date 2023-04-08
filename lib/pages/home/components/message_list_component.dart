@@ -41,6 +41,7 @@ class _MessageListComponentState extends State<MessageListComponent> {
   }
 
   Widget messageItem(MessageRoom messageRoom) {
+    print("message room => ${messageRoom.isRead}");
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       child: Row(
@@ -69,7 +70,7 @@ class _MessageListComponentState extends State<MessageListComponent> {
                 ),
                 const SizedBox(height: 5.0),
                 Text(
-                  messageRoom.lastMessage.isNotEmpty ? messageRoom.lastMessage : "No message",
+                  messageRoom.lastMessage.isNotEmpty ? messageRoom.lastMessage : messageRoom.attachment.isNotEmpty ? "Attachment" : "No message",
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 14.0,
@@ -87,7 +88,6 @@ class _MessageListComponentState extends State<MessageListComponent> {
               MyDateUtils.getTimeDiff(messageRoom.lastMessageDate),
               style: TextStyle(
                   fontSize: 14.0,
-                  color: Colors.black,
                   fontFamily: AppFonts.sfuitextregular
               ),
             ),

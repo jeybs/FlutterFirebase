@@ -1,3 +1,5 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/constant/app_color.dart';
@@ -9,9 +11,12 @@ import 'package:flutter_firebase/pages/chat/chat_cubit.dart';
 import 'package:flutter_firebase/ui/appbar/primary_appbar.dart';
 import 'package:flutter_firebase/ui/buttons/primary_button.dart';
 import 'package:flutter_firebase/ui/buttons/submit_button.dart';
+import 'package:flutter_firebase/ui/loading_dialog.dart';
 import 'package:flutter_firebase/ui/textfields/default_textfield.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class ChatPage extends StatefulWidget {
 
@@ -19,7 +24,6 @@ class ChatPage extends StatefulWidget {
   final UserData contactData;
   final String roomId;
   final String receiverRoomId;
-
   const ChatPage({Key? key, required this.userData, required this.contactData, required this.roomId, required this.receiverRoomId}) : super(key: key);
 
   @override
@@ -33,6 +37,8 @@ class _ChatPageState extends State<ChatPage> {
   List<Message> messageList = [];
   String roomId = "";
   TextEditingController controller = TextEditingController();
+  XFile? mSelectedAttachement;
+  late ProgressDialog pd;
 
   @override
   void initState() {
@@ -41,7 +47,17 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
+  void dispose() {
+    if(cubit != null) {
+      cubit?.cancelToListenMessageUpdate();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    pd = ProgressDialog(context, type: ProgressDialogType.normal ,isDismissible: false, showLogs: true);
+
     return Scaffold(
       appBar: PrimaryAppbar.getDefaultAppBar(context, widget.userData.name),
       body: Container(
@@ -60,6 +76,13 @@ class _ChatPageState extends State<ChatPage> {
 
               if(state is MessageSent) {
 
+              }
+
+              if(state is UploadSuccess) {
+                mSelectedAttachement = null;
+                pd.hide();
+              } else if(state is UploadFailed) {
+                pd.hide();
               }
             },
             builder: (context, state) {
@@ -85,11 +108,12 @@ class _ChatPageState extends State<ChatPage> {
             reverse: true,
             padding: const EdgeInsets.all(8.0),
             order: GroupedListOrder.DESC,
+            sort: false,
             elements: messageList,
             groupBy: (message) => DateTime(
-                message.messageDate!.year,
-                message.messageDate!.month,
-                message.messageDate!.day
+              message.messageDate!.year,
+              message.messageDate!.month,
+              message.messageDate!.day,
             ),
             groupHeaderBuilder: (message) {
               return Container(
@@ -114,17 +138,13 @@ class _ChatPageState extends State<ChatPage> {
               );
             },
             itemBuilder: (context, Message message) {
-              print("message to => ${message.fromId}");
-              print("my to => ${widget.userData.uid}");
               return Align(
                 alignment: message.fromId == widget.userData.uid ? Alignment.centerRight : Alignment.centerLeft,
                 child: Card(
                   elevation: 8,
                   child:  Container(
                     padding: const EdgeInsets.all(12),
-                    child: Text(
-                        message.message
-                    ),
+                    child: message.attachment.isEmpty ? showMessageText(message.message) : showAttachment(message.attachment),
                   ),
                 ),
               );
@@ -135,6 +155,63 @@ class _ChatPageState extends State<ChatPage> {
           color: Colors.white,
           child: Row(
             children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: IconButton(
+                  icon: Icon(Icons.photo, color: AppColor.primaryColor, size: 30.0,),
+                  onPressed: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 300, maxHeight: 300, imageQuality: 70);
+                    if(image != null) {
+                      showOkCancelAlertDialog(
+                        context: context,
+                        title: "Send this photo?",
+                        okLabel: 'Send',
+                        cancelLabel: 'Cancel'
+                      ).then((value) {
+                        if(value == OkCancelResult.ok) {
+                          pd.style(
+                              message: "Uploading In...",
+                              progressWidget: const LoadingDialog());
+
+                          pd.show();
+                          mSelectedAttachement = image;
+                          cubit?.sendMessage("", widget.userData.uid, widget.contactData.uid, widget.roomId, widget.receiverRoomId, mSelectedAttachement);
+                        }
+                      });
+
+                    }
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: IconButton(
+                  icon: Icon(Icons.camera_alt, color: AppColor.primaryColor, size: 30.0,),
+                  onPressed: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image = await _picker.pickImage(source: ImageSource.camera, maxWidth: 300, maxHeight: 300, imageQuality: 70);
+                    if(image != null) {
+                      showOkCancelAlertDialog(
+                          context: context,
+                          title: "Send this photo?",
+                          okLabel: 'Send',
+                          cancelLabel: 'Cancel'
+                      ).then((value) {
+                        if(value == OkCancelResult.ok) {
+                          pd.style(
+                              message: "Uploading In...",
+                              progressWidget: const LoadingDialog());
+
+                          pd.show();
+                          mSelectedAttachement = image;
+                          cubit?.sendMessage("", widget.userData.uid, widget.contactData.uid, widget.roomId, widget.receiverRoomId, mSelectedAttachement);
+                        }
+                      });
+                    }
+                  },
+                ),
+              ),
               Expanded(
                 child: TextField(
                   controller: controller,
@@ -174,13 +251,13 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: IconButton(
                   icon: Icon(Icons.send, color: message.isNotEmpty ? AppColor.primaryColor : Colors.grey, size: 30.0,),
                   onPressed: () {
                     if(message.isNotEmpty) {
                       // Send message
-                      cubit?.sendMessage(message, widget.userData.uid, widget.contactData.uid, widget.roomId, widget.receiverRoomId);
+                      cubit?.sendMessage(message, widget.userData.uid, widget.contactData.uid, widget.roomId, widget.receiverRoomId, mSelectedAttachement);
 
                       setState(() {
                         message = "";
@@ -189,11 +266,32 @@ class _ChatPageState extends State<ChatPage> {
                     }
                   },
                 ),
-              )
+              ),
             ],
           ),
         )
       ],
     );
   }
+
+  Widget showMessageText(String message) {
+    return Text(
+        message
+    );
+  }
+
+  Widget showAttachment(String attachmentLink) {
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: ExtendedImage.network(
+          attachmentLink,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.fitWidth,
+          cache: true,
+          shape: BoxShape.rectangle
+      ),
+    );
+  }
+
 }

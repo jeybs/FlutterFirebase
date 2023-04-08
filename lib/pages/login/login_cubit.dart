@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase/data/firebase/firebase_services.dart';
 import 'package:meta/meta.dart';
 
@@ -20,7 +21,12 @@ class LoginCubit extends Cubit<LoginState> {
         return;
       }
 
-      FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
+
+      FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) async {
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        Map<String, dynamic> updateData = {"device_token": fcmToken};
+        _firebaseServices.updateUser(updateData);
+
         print("signup success => ${value}");
         emit(LoginSuccess());
       }).catchError((error) {

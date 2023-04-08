@@ -25,6 +25,8 @@ mixin _$MessageRoom {
   String get lastMessage => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_message_date')
   String get lastMessageDate => throw _privateConstructorUsedError;
+  @JsonKey(name: 'attachment')
+  String get attachment => throw _privateConstructorUsedError;
   @JsonKey(name: 'from_id')
   String get fromId => throw _privateConstructorUsedError;
   @JsonKey(name: 'to_id')
@@ -52,6 +54,7 @@ abstract class $MessageRoomCopyWith<$Res> {
       {UserData? userData,
       @JsonKey(name: 'last_message') String lastMessage,
       @JsonKey(name: 'last_message_date') String lastMessageDate,
+      @JsonKey(name: 'attachment') String attachment,
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId,
       @JsonKey(name: 'room_id') String roomId,
@@ -77,6 +80,7 @@ class _$MessageRoomCopyWithImpl<$Res, $Val extends MessageRoom>
     Object? userData = freezed,
     Object? lastMessage = null,
     Object? lastMessageDate = null,
+    Object? attachment = null,
     Object? fromId = null,
     Object? toId = null,
     Object? roomId = null,
@@ -95,6 +99,10 @@ class _$MessageRoomCopyWithImpl<$Res, $Val extends MessageRoom>
       lastMessageDate: null == lastMessageDate
           ? _value.lastMessageDate
           : lastMessageDate // ignore: cast_nullable_to_non_nullable
+              as String,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
               as String,
       fromId: null == fromId
           ? _value.fromId
@@ -144,6 +152,7 @@ abstract class _$$_MessageRoomCopyWith<$Res>
       {UserData? userData,
       @JsonKey(name: 'last_message') String lastMessage,
       @JsonKey(name: 'last_message_date') String lastMessageDate,
+      @JsonKey(name: 'attachment') String attachment,
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId,
       @JsonKey(name: 'room_id') String roomId,
@@ -168,6 +177,7 @@ class __$$_MessageRoomCopyWithImpl<$Res>
     Object? userData = freezed,
     Object? lastMessage = null,
     Object? lastMessageDate = null,
+    Object? attachment = null,
     Object? fromId = null,
     Object? toId = null,
     Object? roomId = null,
@@ -186,6 +196,10 @@ class __$$_MessageRoomCopyWithImpl<$Res>
       lastMessageDate: null == lastMessageDate
           ? _value.lastMessageDate
           : lastMessageDate // ignore: cast_nullable_to_non_nullable
+              as String,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
               as String,
       fromId: null == fromId
           ? _value.fromId
@@ -218,6 +232,7 @@ class _$_MessageRoom implements _MessageRoom {
       {this.userData = null,
       @JsonKey(name: 'last_message') this.lastMessage = "",
       @JsonKey(name: 'last_message_date') this.lastMessageDate = "",
+      @JsonKey(name: 'attachment') this.attachment = "",
       @JsonKey(name: 'from_id') this.fromId = "",
       @JsonKey(name: 'to_id') this.toId = "",
       @JsonKey(name: 'room_id') this.roomId = "",
@@ -237,6 +252,9 @@ class _$_MessageRoom implements _MessageRoom {
   @JsonKey(name: 'last_message_date')
   final String lastMessageDate;
   @override
+  @JsonKey(name: 'attachment')
+  final String attachment;
+  @override
   @JsonKey(name: 'from_id')
   final String fromId;
   @override
@@ -254,7 +272,7 @@ class _$_MessageRoom implements _MessageRoom {
 
   @override
   String toString() {
-    return 'MessageRoom(userData: $userData, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, fromId: $fromId, toId: $toId, roomId: $roomId, receiverRoomId: $receiverRoomId, isRead: $isRead)';
+    return 'MessageRoom(userData: $userData, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, attachment: $attachment, fromId: $fromId, toId: $toId, roomId: $roomId, receiverRoomId: $receiverRoomId, isRead: $isRead)';
   }
 
   @override
@@ -268,6 +286,8 @@ class _$_MessageRoom implements _MessageRoom {
                 other.lastMessage == lastMessage) &&
             (identical(other.lastMessageDate, lastMessageDate) ||
                 other.lastMessageDate == lastMessageDate) &&
+            (identical(other.attachment, attachment) ||
+                other.attachment == attachment) &&
             (identical(other.fromId, fromId) || other.fromId == fromId) &&
             (identical(other.toId, toId) || other.toId == toId) &&
             (identical(other.roomId, roomId) || other.roomId == roomId) &&
@@ -278,8 +298,17 @@ class _$_MessageRoom implements _MessageRoom {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userData, lastMessage,
-      lastMessageDate, fromId, toId, roomId, receiverRoomId, isRead);
+  int get hashCode => Object.hash(
+      runtimeType,
+      userData,
+      lastMessage,
+      lastMessageDate,
+      attachment,
+      fromId,
+      toId,
+      roomId,
+      receiverRoomId,
+      isRead);
 
   @JsonKey(ignore: true)
   @override
@@ -300,6 +329,7 @@ abstract class _MessageRoom implements MessageRoom {
       {final UserData? userData,
       @JsonKey(name: 'last_message') final String lastMessage,
       @JsonKey(name: 'last_message_date') final String lastMessageDate,
+      @JsonKey(name: 'attachment') final String attachment,
       @JsonKey(name: 'from_id') final String fromId,
       @JsonKey(name: 'to_id') final String toId,
       @JsonKey(name: 'room_id') final String roomId,
@@ -317,6 +347,9 @@ abstract class _MessageRoom implements MessageRoom {
   @override
   @JsonKey(name: 'last_message_date')
   String get lastMessageDate;
+  @override
+  @JsonKey(name: 'attachment')
+  String get attachment;
   @override
   @JsonKey(name: 'from_id')
   String get fromId;

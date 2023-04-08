@@ -8,6 +8,7 @@ part of 'message.dart';
 
 _$_Message _$$_MessageFromJson(Map<String, dynamic> json) => _$_Message(
       message: json['message'] as String? ?? "",
+      attachment: json['attachment'] as String? ?? "",
       messageDate: json['message_date'] == null
           ? null
           : DateTime.parse(json['message_date'] as String),
@@ -18,6 +19,7 @@ _$_Message _$$_MessageFromJson(Map<String, dynamic> json) => _$_Message(
 Map<String, dynamic> _$$_MessageToJson(_$_Message instance) =>
     <String, dynamic>{
       'message': instance.message,
+      'attachment': instance.attachment,
       'message_date': instance.messageDate?.toIso8601String(),
       'from_id': instance.fromId,
       'to_id': instance.toId,
