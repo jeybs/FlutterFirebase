@@ -33,6 +33,8 @@ mixin _$MessageRoom {
   String get roomId => throw _privateConstructorUsedError;
   @JsonKey(name: 'sender_room_id')
   String get receiverRoomId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_read')
+  bool get isRead => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +55,8 @@ abstract class $MessageRoomCopyWith<$Res> {
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId,
       @JsonKey(name: 'room_id') String roomId,
-      @JsonKey(name: 'sender_room_id') String receiverRoomId});
+      @JsonKey(name: 'sender_room_id') String receiverRoomId,
+      @JsonKey(name: 'is_read') bool isRead});
 
   $UserDataCopyWith<$Res>? get userData;
 }
@@ -78,6 +81,7 @@ class _$MessageRoomCopyWithImpl<$Res, $Val extends MessageRoom>
     Object? toId = null,
     Object? roomId = null,
     Object? receiverRoomId = null,
+    Object? isRead = null,
   }) {
     return _then(_value.copyWith(
       userData: freezed == userData
@@ -108,6 +112,10 @@ class _$MessageRoomCopyWithImpl<$Res, $Val extends MessageRoom>
           ? _value.receiverRoomId
           : receiverRoomId // ignore: cast_nullable_to_non_nullable
               as String,
+      isRead: null == isRead
+          ? _value.isRead
+          : isRead // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -139,7 +147,8 @@ abstract class _$$_MessageRoomCopyWith<$Res>
       @JsonKey(name: 'from_id') String fromId,
       @JsonKey(name: 'to_id') String toId,
       @JsonKey(name: 'room_id') String roomId,
-      @JsonKey(name: 'sender_room_id') String receiverRoomId});
+      @JsonKey(name: 'sender_room_id') String receiverRoomId,
+      @JsonKey(name: 'is_read') bool isRead});
 
   @override
   $UserDataCopyWith<$Res>? get userData;
@@ -163,6 +172,7 @@ class __$$_MessageRoomCopyWithImpl<$Res>
     Object? toId = null,
     Object? roomId = null,
     Object? receiverRoomId = null,
+    Object? isRead = null,
   }) {
     return _then(_$_MessageRoom(
       userData: freezed == userData
@@ -193,6 +203,10 @@ class __$$_MessageRoomCopyWithImpl<$Res>
           ? _value.receiverRoomId
           : receiverRoomId // ignore: cast_nullable_to_non_nullable
               as String,
+      isRead: null == isRead
+          ? _value.isRead
+          : isRead // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -207,7 +221,8 @@ class _$_MessageRoom implements _MessageRoom {
       @JsonKey(name: 'from_id') this.fromId = "",
       @JsonKey(name: 'to_id') this.toId = "",
       @JsonKey(name: 'room_id') this.roomId = "",
-      @JsonKey(name: 'sender_room_id') this.receiverRoomId = ""});
+      @JsonKey(name: 'sender_room_id') this.receiverRoomId = "",
+      @JsonKey(name: 'is_read') this.isRead = false});
 
   factory _$_MessageRoom.fromJson(Map<String, dynamic> json) =>
       _$$_MessageRoomFromJson(json);
@@ -233,10 +248,13 @@ class _$_MessageRoom implements _MessageRoom {
   @override
   @JsonKey(name: 'sender_room_id')
   final String receiverRoomId;
+  @override
+  @JsonKey(name: 'is_read')
+  final bool isRead;
 
   @override
   String toString() {
-    return 'MessageRoom(userData: $userData, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, fromId: $fromId, toId: $toId, roomId: $roomId, receiverRoomId: $receiverRoomId)';
+    return 'MessageRoom(userData: $userData, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, fromId: $fromId, toId: $toId, roomId: $roomId, receiverRoomId: $receiverRoomId, isRead: $isRead)';
   }
 
   @override
@@ -254,13 +272,14 @@ class _$_MessageRoom implements _MessageRoom {
             (identical(other.toId, toId) || other.toId == toId) &&
             (identical(other.roomId, roomId) || other.roomId == roomId) &&
             (identical(other.receiverRoomId, receiverRoomId) ||
-                other.receiverRoomId == receiverRoomId));
+                other.receiverRoomId == receiverRoomId) &&
+            (identical(other.isRead, isRead) || other.isRead == isRead));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, userData, lastMessage,
-      lastMessageDate, fromId, toId, roomId, receiverRoomId);
+      lastMessageDate, fromId, toId, roomId, receiverRoomId, isRead);
 
   @JsonKey(ignore: true)
   @override
@@ -278,14 +297,14 @@ class _$_MessageRoom implements _MessageRoom {
 
 abstract class _MessageRoom implements MessageRoom {
   const factory _MessageRoom(
-          {final UserData? userData,
-          @JsonKey(name: 'last_message') final String lastMessage,
-          @JsonKey(name: 'last_message_date') final String lastMessageDate,
-          @JsonKey(name: 'from_id') final String fromId,
-          @JsonKey(name: 'to_id') final String toId,
-          @JsonKey(name: 'room_id') final String roomId,
-          @JsonKey(name: 'sender_room_id') final String receiverRoomId}) =
-      _$_MessageRoom;
+      {final UserData? userData,
+      @JsonKey(name: 'last_message') final String lastMessage,
+      @JsonKey(name: 'last_message_date') final String lastMessageDate,
+      @JsonKey(name: 'from_id') final String fromId,
+      @JsonKey(name: 'to_id') final String toId,
+      @JsonKey(name: 'room_id') final String roomId,
+      @JsonKey(name: 'sender_room_id') final String receiverRoomId,
+      @JsonKey(name: 'is_read') final bool isRead}) = _$_MessageRoom;
 
   factory _MessageRoom.fromJson(Map<String, dynamic> json) =
       _$_MessageRoom.fromJson;
@@ -310,6 +329,9 @@ abstract class _MessageRoom implements MessageRoom {
   @override
   @JsonKey(name: 'sender_room_id')
   String get receiverRoomId;
+  @override
+  @JsonKey(name: 'is_read')
+  bool get isRead;
   @override
   @JsonKey(ignore: true)
   _$$_MessageRoomCopyWith<_$_MessageRoom> get copyWith =>

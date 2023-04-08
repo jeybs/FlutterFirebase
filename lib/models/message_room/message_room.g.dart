@@ -17,6 +17,7 @@ _$_MessageRoom _$$_MessageRoomFromJson(Map<String, dynamic> json) =>
       toId: json['to_id'] as String? ?? "",
       roomId: json['room_id'] as String? ?? "",
       receiverRoomId: json['sender_room_id'] as String? ?? "",
+      isRead: json['is_read'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_MessageRoomToJson(_$_MessageRoom instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$_MessageRoomToJson(_$_MessageRoom instance) =>
       'to_id': instance.toId,
       'room_id': instance.roomId,
       'sender_room_id': instance.receiverRoomId,
+      'is_read': instance.isRead,
     };

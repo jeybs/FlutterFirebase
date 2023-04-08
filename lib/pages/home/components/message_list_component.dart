@@ -61,7 +61,7 @@ class _MessageListComponentState extends State<MessageListComponent> {
                   child: Text(
                     messageRoom.userData!.name,
                     style: TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         color: Colors.black,
                         fontFamily: AppFonts.sfuitextmedium
                     ),
@@ -73,7 +73,8 @@ class _MessageListComponentState extends State<MessageListComponent> {
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.grey[600],
+                    color: messageRoom.isRead ? Colors.grey[600] : Colors.black,
+                    fontWeight: messageRoom.isRead ? FontWeight.normal : FontWeight.bold,
                     fontFamily: AppFonts.sfuitextregular,
                   ),
                 ),

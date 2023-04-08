@@ -5,6 +5,7 @@ import 'package:flutter_firebase/data/firebase/firebase_services.dart';
 import 'package:flutter_firebase/models/contact_data/contact.dart';
 import 'package:flutter_firebase/models/message_room/message_room.dart';
 import 'package:flutter_firebase/models/user_data/user_data.dart';
+import 'package:flutter_firebase/utils/date_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
@@ -76,8 +77,26 @@ class HomeCubit extends Cubit<HomeState> {
 
   getRooms() {
     Future.delayed(const Duration(microseconds: 500), () async {
-      List<MessageRoom> messageRoomList = await _firebaseServices.getMyRooms();
-      emit(RoomsLoaded(messageRoomList));
+      _firebaseServices.getMyRooms().listen((event) async {
+        List<MessageRoom> roomList = [];
+        if(event.docs.isNotEmpty) {
+          for(var docsData in event.docs) {
+            MessageRoom room = MessageRoom(
+                userData: await _firebaseServices.searchUserByUid(docsData.data()['from_id']),
+                lastMessage: docsData.data()['last_message'],
+                lastMessageDate: docsData.data()['last_message_date'] != "" ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
+                toId: docsData.data()['to_id'],
+                roomId: docsData.id,
+                receiverRoomId: await _firebaseServices.getRoomId(docsData.data()['from_id'], docsData.data()['to_id']),
+                isRead: docsData.data()['is_read']
+            );
+
+            roomList.add(room);
+          }
+
+          emit(RoomsLoaded(roomList));
+        }
+      });
     });
   }
 }

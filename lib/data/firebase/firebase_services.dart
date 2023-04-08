@@ -290,30 +290,12 @@ class FirebaseServices {
     return messageList;
   }
 
-  Future<List<MessageRoom>> getMyRooms() async {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMyRooms() {
     String uid = authInstance.currentUser!.uid;
-    final roomCollections = await firestoreInstance.collection(_messageCollections)
+    return firestoreInstance.collection(_messageCollections)
         .where('to_id', isEqualTo: uid)
         .orderBy('last_message_date', descending: true)
-        .get(const GetOptions(source: Source.server));
-
-    List<MessageRoom> roomList = [];
-    if(roomCollections.docs.isNotEmpty) {
-      for(var docsData in roomCollections.docs) {
-        MessageRoom room = MessageRoom(
-          userData: await searchUserByUid(docsData.data()['from_id']),
-          lastMessage: docsData.data()['last_message'],
-          lastMessageDate: docsData.data()['last_message_date'] != "" ? MyDateUtils.formatTimestamp(docsData.data()['last_message_date']) : "",
-          toId: docsData.data()['to_id'],
-          roomId: docsData.id,
-          receiverRoomId: await getRoomId(docsData.data()['from_id'], docsData.data()['to_id'])
-        );
-        
-        roomList.add(room);
-      }
-    }
-
-    return roomList;
+        .snapshots();
   }
 
   Future<String> getRoomId(String fromId, String toId)async {
@@ -329,12 +311,13 @@ class FirebaseServices {
     return "";
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> startListening(String roomId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> startMessageListening(String roomId) {
     return firestoreInstance.collection(_messageCollections).doc(roomId)
         .collection(_messageListcollection)
         .orderBy('message_date')
         .snapshots();
   }
+
 
   Future<void> markRoomAsRead(String roomId, bool isRead) async {
     final roomCollection = firestoreInstance.collection(_messageCollections)

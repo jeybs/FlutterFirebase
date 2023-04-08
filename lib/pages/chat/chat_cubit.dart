@@ -62,7 +62,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   listenToMessageUpdate(String roomId) {
-    _firebaseServices.startListening(roomId).listen((event) async {
+    _firebaseServices.startMessageListening(roomId).listen((event) async {
       if(event.size > 0) {
         List<Message> messageList = [];
         for(var docsData in event.docs) {

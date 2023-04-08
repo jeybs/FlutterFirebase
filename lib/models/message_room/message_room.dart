@@ -15,7 +15,8 @@ class MessageRoom with _$MessageRoom {
     @JsonKey(name: 'from_id') @Default("") String fromId,
     @JsonKey(name: 'to_id') @Default("") String toId,
     @JsonKey(name: 'room_id') @Default("") String roomId,
-  @JsonKey(name: 'sender_room_id') @Default("") String receiverRoomId
+    @JsonKey(name: 'sender_room_id') @Default("") String receiverRoomId,
+    @JsonKey(name: 'is_read') @Default(false) bool isRead
   }) = _MessageRoom;
 
   factory MessageRoom.fromJson(Map<String, Object?> json) => _$MessageRoomFromJson(json);
